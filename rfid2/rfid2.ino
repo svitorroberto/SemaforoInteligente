@@ -10,7 +10,7 @@ boolean pino = false;
 ////////////////////////////////////////////////////////////////////////
 //CONFIGURE
 ////////////////////////////////////////////////////////////////////////
-  byte ip[] = {192, 168, 1, 12};   //Manual setup only
+  byte ip[] = {10, 62, 2, 5};   //Manual setup only
   //byte gateway[] = { 192, 168, 0, 1 }; //Manual setup only
   //byte subnet[] = { 255, 255, 255, 0 }; //Manual setup only
 
@@ -27,16 +27,7 @@ boolean pino = false;
 void setup(){
   Serial.begin(9600);
 
-  //Pins 10,11,12 & 13 are used by the ethernet shield
-
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(9, OUTPUT);
+ 
 
   Ethernet.begin(mac, ip);
   //Ethernet.begin(mac, ip, gateway, subnet); //for manual setup
@@ -141,8 +132,8 @@ void checkForClient(){
  //           Serial.println("Tempo: "+tempo);
             t1=sem1.toInt();
             t2=sem2.toInt();
-//            Serial.println(t1);
-//            Serial.println(t2);
+            Serial.println(t1);
+            Serial.println(t2);
 
             tempo="";
             count=0;
