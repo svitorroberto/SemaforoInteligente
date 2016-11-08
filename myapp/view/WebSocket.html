@@ -1,0 +1,145 @@
+
+<!-- Licensed under a BSD license. See license.html for license -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>KPSimple</title>
+
+<script src="../api/jquery.min.js" type="text/javascript">;</script>
+<script type="text/javascript"> var pathToWebsocketServer = "ws://sofia2.com/sib/api_websocket";</script>
+<script type='text/javascript' src="../api/sofia2-api-js_v2.15.0.js">;</script>
+
+
+<script type="text/javascript">
+
+window.onload = conectarSIBConToken;
+var sessionKey;
+var date = new Date();
+var idsuscripcion;
+
+function errorHandler(message, ex){   
+	log( "ERROR:" + ex.message );
+}
+
+function log( texto ) {
+	var textArea = document.getElementById( "textArea" );
+	var split = textArea.value.split( "\n" );
+	while( split.length >= 10 ) {
+		split.shift();
+	}
+	textArea.value = "";
+	for ( var ii = 0; ii < split.length; ++ii ) {
+		textArea.value += split[ ii ] + "\n";
+	}
+
+	textArea.value += texto;
+}
+
+function clearLog( texto ) {
+	var textArea = document.getElementById( "textArea" );
+	textArea.value = minhaVar;
+}
+    
+//ABRE, ENVIA E FECHA CONEXAO
+function conectarSIBConToken() {
+    
+	pathToDwrServlet = "ws://sofia2.com/sib/api_websocket";
+	var token = "b05cde7ef59745f5acd913709d3f298f";
+	var kp = "kpSemaforoInteligente5";
+	var ontology = "semaforoInteligente5";
+	var instance = "WebSocket";
+
+	pathToDwrServlet = "ws://sofia2.com/sib/api_websocket";
+	var token = "b05cde7ef59745f5acd913709d3f298f";
+	var kp = "kpSemaforoInteligente5";
+	var ontology = "semaforoInteligente5";
+	var instance = "WebSocket";
+    //ABRE CONEXAO
+	sofia2.joinToken( token.value, kp.value + ":" + instance.value, function( mensajeSSAP ) {
+		if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
+			sessionKey = mensajeSSAP.sessionKey;
+			log( "session:" + sessionKey );
+            sendCustomMessage();
+		}
+		else {
+			alert( "Error conectando del sib" );
+		}
+	} );
+    
+    
+	 
+	
+}
+
+function sendCustomMessage() {
+	if ( sessionKey != null ) {
+		var message = "{ 'semaforoInteligente5': { 'geometry':  { 'coordinates': [ -16.659963, -49.247095 ], 'type': 'Point' }, 'id_antena': 1, 'timestamp': { '$date':'2016-11-07T08:00:00.000Z' }, 'id_veiculo': '7424', 'id_cruzamento': 1, 'qtd_veiculo': 1, 'nome_cruzamento': 'Av A com Av B' } }";
+		sofia2.insert( message, sibOntology.value, function( mensajeSSAP ) {
+			if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
+				log( "Mensaje enviado ok" );
+			}
+			else {
+				alert( "Error: " + mensajeSSAP.body.error );
+			}
+		} );
+	}
+    
+    desconectarSIB();
+}
+
+
+function desconectarSIB() {
+  sofia2.leave( function( mensajeSSAP ) {
+		 if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
+				log( "Desconectado del sib" );
+				sessionKey = null;
+		 }
+		 else {
+			  alert( "Error desconectando del sib" );
+		 }
+	});
+}
+
+</script>
+
+</head>
+<body>
+<!-- div principal no selectable -->
+
+<div>
+	SIB address<input id="sibAddress" size="35" value='ws://sofia2.com/sib/api_websocket'/>
+</div>
+<div>
+	token <input id="sibToken" size="35" value="b05cde7ef59745f5acd913709d3f298f"/>
+</div>
+<div>
+	ontologia <input id="sibOntology" size="35" value="semaforoInteligente5"/>
+</div>
+<div>
+	kp <input id="sibKp" size="35" value="kpSemaforoInteligente5"/>
+</div>
+<div>
+	instance <input id="sibInstance" size="35" value="WebSocket"/>
+</div>
+<div>
+	<button id="myButton" onclick="conectarSIBConToken();">Conectar SIB</button>
+	<button id="myButton" onclick="desconectarSIB();">Desconectar SIB</button>
+</div>
+<div>
+	<button id="myButton" onclick="suscribirSIB();">Suscribir SIB</button>
+	<button id="myButton" onclick="desuscribirSIB();">Desuscribir SIB</button>
+</div>
+<div>
+	Measure<input id="inputMessage" size="25" value="15"/>
+</div>
+
+<div>
+	<button id="buttonReset" onclick="sendCustomMessage();">send message</button>
+	<button id="myButton" onclick="clearLog();">Clear</button>
+</div>
+<div>
+<textarea id="textArea" rows="10" cols="52">Hola KPSimple</textarea>
+</div>
+</body>
+</html>
