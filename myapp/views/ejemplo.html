@@ -1,3 +1,4 @@
+
 <!-- Licensed under a BSD license. See license.html for license -->
 <!DOCTYPE html>
 <html>
@@ -9,15 +10,22 @@
 <script type="text/javascript"> var pathToWebsocketServer = "ws://sofia2.com/sib/api_websocket";</script>
 <script type='text/javascript' src="../api/sofia2-api-js_v2.15.0.js">;</script>
 
+<!--script type='text/javascript' src="XXTEA.js">;</script-->
+<!--script type='text/javascript' src="base64.js">;</script-->
+<!--script type='text/javascript' src="dygraph-combined.js">;</script-->
 
 <script type="text/javascript">
+
 window.onload = conectarSIBConToken;
 var sessionKey;
 var date = new Date();
 var idsuscripcion;
+   
+
 function errorHandler(message, ex){   
 	log( "ERROR:" + ex.message );
 }
+
 function log( texto ) {
 	var textArea = document.getElementById( "textArea" );
 	var split = textArea.value.split( "\n" );
@@ -28,28 +36,34 @@ function log( texto ) {
 	for ( var ii = 0; ii < split.length; ++ii ) {
 		textArea.value += split[ ii ] + "\n";
 	}
+
 	textArea.value += texto;
 }
+
 function clearLog( texto ) {
 	var textArea = document.getElementById( "textArea" );
-	textArea.value = minhaVar;
+	textArea.value = "";
 }
-    
-//ABRE, ENVIA E FECHA CONEXAO
+
+function sendCustomMessage() {
+	if ( sessionKey != null ) {
+		var message = "{ 'semaforoInteligente5': { 'geometry':  { 'coordinates': [ -16.659963, -49.247095 ], 'type': 'Point' }, 'id_antena': 1, 'timestamp': { '$date':'2016-11-07T08:00:00.000Z' }, 'id_veiculo': '7424', 'id_cruzamento': 1, 'qtd_veiculo': 1, 'nome_cruzamento': 'Av Goias com Av Independencia' } }";
+		sofia2.insert( message, "semaforoInteligente5", function( mensajeSSAP ) {
+			if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
+				log( "Mensaje enviado ok" );
+			}
+			else {
+				alert( "Error: " + mensajeSSAP.body.error );
+			}
+		} );
+        	desconectarSIB();
+	}
+}
+
+/* Funciones del SIB */
 function conectarSIBConToken() {
-    
-	pathToDwrServlet = "ws://sofia2.com/sib/api_websocket";
-	var token = "b05cde7ef59745f5acd913709d3f298f";
-	var kp = "kpSemaforoInteligente5";
-	var ontology = "semaforoInteligente5";
-	var instance = "WebSocket";
-	pathToDwrServlet = "ws://sofia2.com/sib/api_websocket";
-	var token = "b05cde7ef59745f5acd913709d3f298f";
-	var kp = "kpSemaforoInteligente5";
-	var ontology = "semaforoInteligente5";
-	var instance = "WebSocket";
-    //ABRE CONEXAO
-	sofia2.joinToken( token.value, kp.value + ":" + instance.value, function( mensajeSSAP ) {
+
+	sofia2.joinToken( "b05cde7ef59745f5acd913709d3f298f", "kpSemaforoInteligente5:WebSocket", function( mensajeSSAP ) {
 		if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
 			sessionKey = mensajeSSAP.sessionKey;
 			log( "session:" + sessionKey );
@@ -59,26 +73,10 @@ function conectarSIBConToken() {
 			alert( "Error conectando del sib" );
 		}
 	} );
-    
-    
-	 
 	
+
 }
-function sendCustomMessage() {
-	if ( sessionKey != null ) {
-		var message = "{ 'semaforoInteligente5': { 'geometry':  { 'coordinates': [ -16.659963, -49.247095 ], 'type': 'Point' }, 'id_antena': 1, 'timestamp': { '$date':'2016-11-07T08:00:00.000Z' }, 'id_veiculo': '7424', 'id_cruzamento': 1, 'qtd_veiculo': 1, 'nome_cruzamento': 'Av A com Av B' } }";
-		sofia2.insert( message, sibOntology.value, function( mensajeSSAP ) {
-			if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
-				log( "Mensaje enviado ok" );
-			}
-			else {
-				alert( "Error: " + mensajeSSAP.body.error );
-			}
-		} );
-	}
-    
-    desconectarSIB();
-}
+
 function desconectarSIB() {
   sofia2.leave( function( mensajeSSAP ) {
 		 if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
@@ -90,6 +88,7 @@ function desconectarSIB() {
 		 }
 	});
 }
+
 </script>
 
 </head>
@@ -100,16 +99,16 @@ function desconectarSIB() {
 	SIB address<input id="sibAddress" size="35" value='ws://sofia2.com/sib/api_websocket'/>
 </div>
 <div>
-	token <input id="sibToken" size="35" value="b05cde7ef59745f5acd913709d3f298f"/>
+	token <input id="sibToken" size="35" value="e5e8a005d0a248f1ad2cd60a821e6838"/>
 </div>
 <div>
-	ontologia <input id="sibOntology" size="35" value="semaforoInteligente5"/>
+	ontologia <input id="sibOntology" size="35" value="TestSensorTemperatura"/>
 </div>
 <div>
-	kp <input id="sibKp" size="35" value="kpSemaforoInteligente5"/>
+	kp <input id="sibKp" size="35" value="KPTestTemperatura"/>
 </div>
 <div>
-	instance <input id="sibInstance" size="35" value="WebSocket"/>
+	instance <input id="sibInstance" size="35" value="KPTestTemperatura01"/>
 </div>
 <div>
 	<button id="myButton" onclick="conectarSIBConToken();">Conectar SIB</button>

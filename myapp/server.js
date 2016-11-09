@@ -27,16 +27,14 @@ console.log("Web Service escutando em http://localhost:9000");
 
   id_antena = req.query.idantena;
   id_veiculo = req.query.idveiculo;
-  id_cruzamento = req.query.idcruzamento;
-  qtd_veiculo = req.query.qtdveiculo;
+  //id_cruzamento = req.query.idcruzamento;
+  //qtd_veiculo = req.query.qtdveiculo;
   
   //   localStorage.setItem("id_veiculo2", id_veiculo);
      
   //res.send({ user: id_veiculo });
-  res.end(fs.readFileSync("view/WebSocket.html"));
+  res.end(fs.readFileSync("views/ejemplo.html"));
   //res.send(id_antena + ' ' + id_veiculo + ' ' + id_cruzamento + ' ' + qtd_veiculo);
-  console.log(id_antena + ' ' + id_veiculo + ' ' + id_cruzamento + ' ' + qtd_veiculo);
+  console.log(id_antena + ' ' + id_veiculo);
 
 });
-
-
