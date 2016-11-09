@@ -59,7 +59,6 @@ void loop() {
   String id_antena = "1";
   String id_veiculo;
   String id_cruzamento = "1";
-  String qtd_veiculo = "1";
   
   //Pegando ID do cartão em HEX
   for (byte i = 0; i < 6; i++) {
@@ -85,7 +84,7 @@ void loop() {
   if (!joined) {
     Serial.println();
 
-      updateThingSpeak("idantena="+id_antena+"&idveiculo="+id_veiculo+"&idcruzamento="+id_cruzamento+"&qtdveiculo="+qtd_veiculo);
+      updateThingSpeak("idantena="+id_antena+"&idveiculo="+id_veiculo);
     
     }
   
