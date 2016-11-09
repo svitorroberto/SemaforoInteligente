@@ -16,7 +16,7 @@ boolean pino = false;
 ////////////////////////////////////////////////////////////////////////
 //CONFIGURE
 ////////////////////////////////////////////////////////////////////////
-byte ip[] = {10, 62, 2, 3};    //Manual setup only
+byte ip[] = {10, 62, 2, 4};    //Manual setup only
 
 // if need to change the MAC address (Very Rare)
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
@@ -25,7 +25,9 @@ String sem1 = "";
 String sem2 = "";
 int t1 = 0;
 int t2 = 0;
-int tempoAmarelo = 9;
+int qtd1 = 0;
+int qtd2 = 0;
+int tempoAmarelo = 5;
 int semaforo = 0;
 EthernetServer server = EthernetServer(80); //port 80
 ////////////////////////////////////////////////////////////////////////
@@ -193,9 +195,11 @@ void checkForClient() {
           contador++;
           if (count > 7 && contador == 1) {
 
-            t1 = sem1.toInt();
-            t2 = sem2.toInt();
+            qtd1 = sem1.toInt();
+            qtd2 = sem2.toInt();
 
+            priorizacao(qtd1,qtd2);
+            
             client.println("Iniciando o cilo 1");
             ciclo(1,t1);
             
@@ -251,6 +255,70 @@ void separador(char pin, EthernetClient client) {
   pino = true;
 
 }
+/////////////////////////////////////////////////////
+////////////////////////////////
+//ALGORITMO DE PRIORIZAÇÃO//////
+////////////////////////////////
+void priorizacao(int carrosSem1, int carrosSem2){
+  //DEFINE PRIORIDADE PARA CADA CATEGORIA DE AVENIDA
+  double pesoAvenida1 = 1.1;
+  double pesoAvenida2 = 1.1;
+  double pesoAvenida3 = 1.2;
+  double pesoAvenida4 = 1.2;
+  double pesoAvenida5 = 1.3;
+  double pesoAvenida6 = 1.4;
+  double pesoAvenida7 = 1.5;
+  double pesoAvenida8 = 1.6;
+  double pesoAvenida9 = 1.6;
+  double pesoAvenida10 = 1.7;
+  //DEFINE O TAMANHO DO CICLO
+  int tamanhoCiclo = 70;
+  double tempo1 = tamanhoCiclo/2;
+  //VERIFICA QTD DIFERENCA DE CARROS
+  int diferencaCarros = carrosSem1-carrosSem2;
+  //DIFERENCA DE PESO ENTRE AVENIDAS
+
+  double pesoAvenidas = (pesoAvenida7-pesoAvenida4)+1;
+  tempo1 = tempo1*pesoAvenidas;
+
+
+  if(abs(diferencaCarros)==1){
+    tempo1 *= 1.1;
+  }
+  if(abs(diferencaCarros)==2){
+    tempo1 *= 1.2;
+  }
+    if(abs(diferencaCarros)==3){
+    tempo1 *= 1.2;
+  }
+    if(abs(diferencaCarros)==4){
+    tempo1 *= 1.3;
+  }
+    if(abs(diferencaCarros)==5){
+    tempo1 *= 1.3;
+  }
+    if(abs(diferencaCarros)==6){
+    tempo1 *= 1.4;
+  }
+  if(abs(diferencaCarros)>7){
+    tempo1 *= 1.5;
+  }
+
+  if(carrosSem1>carrosSem2){
+    t1 = (int)tempo1;
+    t2 = tamanhoCiclo-t2;
+  }
+  else{
+    t2 = (int)tempo1;
+    t1 = tamanhoCiclo-t2;
+  }
+
+  
+}
+
+
+
+
 
 
 
