@@ -47,7 +47,7 @@ function clearLog( texto ) {
 
 function sendCustomMessage() {
 	if ( sessionKey != null ) {
-		var message = "{ 'semaforoInteligente5': { 'geometry':  { 'coordinates': [ -16.659963, -49.247095 ], 'type': 'Point' }, 'id_antena': 1, 'timestamp': { '$date':'2016-11-07T08:00:00.000Z' }, 'id_veiculo': '7424', 'id_cruzamento': 1, 'qtd_veiculo': 1, 'nome_cruzamento': 'Av Goias com Av Independencia' } }";
+		var message = "{ 'semaforoInteligente5': { 'geometry':  { 'coordinates': [ -16.659963, -49.247095 ], 'type': 'Point' }, 'id_antena': 1, 'timestamp': { '$date':'2016-11-07T08:00:00.000Z' }, 'id_veiculo': '26148', 'id_cruzamento': 1, 'qtd_veiculo': 1, 'nome_cruzamento': 'Av Goias com Av Independencia' } }";
 		sofia2.insert( message, "semaforoInteligente5", function( mensajeSSAP ) {
 			if ( mensajeSSAP != null && mensajeSSAP.body.data != null && mensajeSSAP.body.ok == true ) {
 				log( "Mensaje enviado ok" );

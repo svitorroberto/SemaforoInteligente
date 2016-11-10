@@ -15,9 +15,9 @@
 #include <SPI.h>
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};//Arduino MAC
-IPAddress ip(10,62,2,3);// Arduino IP
+IPAddress ip(10,62,2,4);// Arduino IP
 // ThingSpeak Settings
-IPAddress server(10,62,2,2);
+IPAddress server(10,62,2,3);
 //char thingSpeakAddress[] = "10.62.2.3";
 boolean joined = false;
 unsigned long uid = 1LL;
@@ -37,7 +37,7 @@ void setup() {
   Serial.begin( 9600 );
   SPI.begin();        // Init SPI bus
   mfrc522.PCD_Init(); // Init MFRC522 card
-  Serial.println("Approximate your card to the reader...");
+  Serial.println("Aguardando proximo carro...");
   Serial.println();
   Ethernet.begin(mac, ip);
 
@@ -91,7 +91,7 @@ void loop() {
 
     
     Serial.println("-End of Loop-");
-    delay(2000);
+    delay(1000);
 
 }
 

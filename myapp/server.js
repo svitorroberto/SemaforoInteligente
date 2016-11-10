@@ -35,6 +35,6 @@ console.log("Web Service escutando em http://localhost:9000");
   //res.send({ user: id_veiculo });
   res.end(fs.readFileSync("views/ejemplo.html"));
   //res.send(id_antena + ' ' + id_veiculo + ' ' + id_cruzamento + ' ' + qtd_veiculo);
-  console.log(id_antena + ' ' + id_veiculo);
+  console.log(' id antena:' + id_antena + ' id veiculo:' + id_veiculo);
 
 });
